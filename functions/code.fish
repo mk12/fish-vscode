@@ -13,16 +13,20 @@ function code --description "Open in VS Code"
             open -b com.microsoft.VSCode $argv[1]
         case Linux
             if test -d ~/.vscode-server -a -z "$VSCODE_IPC_HOOK_CLI"
-                set hashes (ls ~/.vscode-server/bin)
-                if test (count $hashes) = 0
+                for s in ~/.vscode-server/bin/*/server.sh
+                    if pgrep -f $s
+                        set bins $bins (dirname $s)
+                    end
+                end
+                if test (count $bins) = 0
                     echo "Error: no VS Code remote server found" >&2
                     return
                 end
-                if test (count $hashes) -gt 1
+                if test (count $bins) -gt 1
                     echo "Error: more than one VS Code remote server found" >&2
                     return
                 end
-                set code "$HOME/.vscode-server/bin/$hashes[1]/bin/remote-cli/code"
+                set code "$bins/bin/remote-cli/code"
                 if not command -qv socat
                     echo "Error: please install socat" >&2
                     return
