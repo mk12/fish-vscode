@@ -14,7 +14,7 @@ function code --description "Open in VS Code"
         case Linux
             if test -d ~/.vscode-server -a -z "$VSCODE_IPC_HOOK_CLI"
                 for s in ~/.vscode-server/bin/*/server.sh
-                    if pgrep -f $s
+                    if pgrep -f $s &> /dev/null
                         set bins $bins (dirname $s)
                     end
                 end
