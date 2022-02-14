@@ -14,11 +14,11 @@ function code --description "Open in VS Code"
         case Linux
             if test -d ~/.vscode-server -a -z "$VSCODE_IPC_HOOK_CLI"
                 set hashes (ls ~/.vscode-server/bin)
-                if test (count hashes) = 0
+                if test (count $hashes) = 0
                     echo "Error: no VS Code remote server found" >&2
                     return
                 end
-                if test (count hashes) -gt 1
+                if test (count $hashes) -gt 1
                     echo "Error: more than one VS Code remote server found" >&2
                     return
                 end
@@ -34,11 +34,11 @@ function code --description "Open in VS Code"
                         rm $f
                     end
                 end
-                if test (count socks) = 0
+                if test (count $socks) = 0
                     echo "Error: no VS Code remote server socket found" >&2
                     return
                 end
-                if test (count socks) -gt 1
+                if test (count $socks) -gt 1
                     echo "Error: more than one VS Code remote server socket found" >&2
                     return
                 end
