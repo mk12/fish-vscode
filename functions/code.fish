@@ -1,21 +1,28 @@
 # Copyright 2022 Mitchell Kember. Subject to the MIT License.
 
 function code --description "Open in VS Code"
-    if test (count $argv) != 1 || string match -q -- "-*" "$argv[1]"
+    if test (count $argv) = 0 || string match -q -- "-*" $argv
         command code $argv
         return
     end
     switch (uname -s)
         case Darwin
+            for file in $arg
+                test -e $file || touch $file
+            end
             # This is faster and avoids a Dock animation:
             # https://github.com/microsoft/vscode/issues/60579
-            test -e $argv[1]; or touch $argv[1]
-            open -b com.microsoft.VSCode $argv[1]
+            open -b com.microsoft.VSCode $argv
         case Linux
-            if test -d ~/.vscode-server -a -z "$VSCODE_IPC_HOOK_CLI"
+            if test ! -d ~/.vscode-server -o -n "$VSCODE_IPC_HOOK_CLI"
+                # Use the regular code command if it doesn't look there is any
+                # VS Code server running, *or* if it looks like we're in the VS
+                # Code integrated terminal (which handles `code` specially).
+                command code $argv
+            else
                 for s in ~/.vscode-server/bin/*/server.sh
                     set d (dirname $s)
-                    if pgrep -f $d &> /dev/null
+                    if pgrep -f $d &> /dev/null && test -f $d/vscode-remote-lock.$USER.(basename $d)
                         set bins $bins $d
                     end
                 end
@@ -48,8 +55,8 @@ function code --description "Open in VS Code"
                     return
                 end
                 VSCODE_IPC_HOOK_CLI=$socks $code $argv
-            else
-                command code $argv
             end
+        case '*'
+            command code $argv
     end
 end
