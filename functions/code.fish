@@ -52,7 +52,6 @@ function code --description "Open in VS Code"
                 end
                 if test (count $socks) -gt 1
                     echo "Warning: more than one VS Code remote server socket found" >&2
-                    return
                 end
                 VSCODE_IPC_HOOK_CLI=$socks[1] $code $argv
             end
