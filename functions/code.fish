@@ -1,12 +1,12 @@
 # Copyright 2022 Mitchell Kember. Subject to the MIT License.
 
 function code --description "Open in VS Code"
-    if test (count $argv) = 0 || string match -q -- "-*" $argv
-        command code $argv
-        return
-    end
     switch (uname -s)
         case Darwin
+            if test (count $argv) = 0 || string match -q -- "-*" $argv
+                command code $argv
+                return
+            end
             for file in $arg
                 test -e $file || touch $file
             end
