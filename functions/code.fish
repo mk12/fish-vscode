@@ -20,7 +20,7 @@ function code --description "Open in VS Code"
                 # Code integrated terminal (which handles `code` specially).
                 command code $argv
             else
-                for s in ~/.vscode-server/bin/*/server.sh
+                for s in ~/.vscode-server/bin/*/vscode-remote-lock.$USER.*
                     set d (dirname $s)
                     if pgrep -f $d &> /dev/null && test -f $d/vscode-remote-lock.$USER.(basename $d)
                         set bins $bins $d
