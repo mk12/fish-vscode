@@ -23,7 +23,7 @@ function code --description "Open in VS Code"
                 for s in ~/.vscode-server/bin/*/vscode-remote-lock.$USER.*
                     set d (dirname $s)
                     if pgrep -f $d &> /dev/null && test -f $d/vscode-remote-lock.$USER.(basename $d)
-                        set bins $bins $d
+                        set -a bins $d
                     end
                 end
                 if test (count $bins) = 0
@@ -41,7 +41,7 @@ function code --description "Open in VS Code"
                 end
                 for f in /run/user/(id -u)/vscode-ipc-*.sock
                     if socat -u OPEN:/dev/null UNIX-CONNECT:$f &> /dev/null
-                        set socks $socks $f
+                        set -a socks $f
                     else
                         rm $f
                     end
