@@ -4,7 +4,7 @@ A [Fish] plugin that augments the [VS Code] CLI.
 
 ## Installation
 
-Use [Fisher]:
+Run `make install`, or use [Fisher]:
 
 ```fish
 fisher install mk12/fish-vscode
